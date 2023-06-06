@@ -12,6 +12,7 @@
 
 import { copy } from './usecases/copy';
 import { download } from './usecases/download';
+import { removeTmp } from './usecases/removeTmp';
 
 async function main() {
   // parseUrl('https://github.com/bisquit/rget');
@@ -27,6 +28,8 @@ async function main() {
   console.log('subpath', subpath);
 
   await copy(`tmp/resolved${subpath}`, '.');
+
+  await removeTmp();
 }
 
 main();
