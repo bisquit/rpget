@@ -12,29 +12,38 @@
  */
 
 /**
- * Possible fetch methods
+ * Downloader
+ *
+ * input - repo, refs, directory
+ * output - write files to tmp/out directory
+ *
+ * Possible downloader
  *
  * 1. curl with personal access token - deprecated
+ *
  * 2. gh - useful but need setup github cli
  *   https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#download-a-repository-archive-zip
+ *
  * 3. git clone - useful
+ *  more efficient with sparse checkout
  */
 
 import { $ } from 'execa';
 
+import { parseUrl } from './utils/parseUrl';
+
 async function main() {
   console.log('main start');
-  await $`git clone --depth=1 -b sample/1 git@github.com:bisquit/rget.git tmp`;
+
+  parseUrl('https://github.com/bisquit/rget');
+  parseUrl('https://github.com/bisquit/rget/');
+  parseUrl('https://github.com/bisquit/rget/tree/sample/1/src');
+  parseUrl('https://github.com/bisquit/vscode-fuzzy-go-to-spec/tree/main');
+
+  // await $`git clone --depth=1 -b sample/1 git@github.com:bisquit/rget.git tmp`;
 }
 
 main();
-
-/**
- * TODO
- */
-function parseUrl() {
-  // parse url into repo, ref, directory
-}
 
 /**
  * TODO
