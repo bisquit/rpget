@@ -24,7 +24,7 @@ import { $ } from 'execa';
 
 async function main() {
   console.log('main start');
-  $`git clone -b x`;
+  await $`git clone --depth=1 -b sample/1 git@github.com:bisquit/rget.git tmp`;
 }
 
 main();
