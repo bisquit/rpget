@@ -56,7 +56,7 @@ rpget https://github.com/bisquit/rpget
 
 ## How it works
 
-This tool downloads archive in temp directory using `gh api`, and 
+This tool downloads archive(.zip) into a temp directory using `gh api`, and 
 after user confirmed, decompresses it and copies into current directory.
 
 Because branches can include `/`, we cannot distinguish the URL `main/src` between:
