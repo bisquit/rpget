@@ -19,9 +19,14 @@ export async function parseUrl(
       .and(oneOrMore(charNotIn('/')))
       .groupedAs('repo'),
     maybe('/'),
-    maybe(anyOf('tree/', 'blob/')),
-    maybe(oneOrMore(char).groupedAs('rest')),
-    maybe('/').at.lineEnd()
+    maybe(
+      anyOf('tree/', 'blob/'),
+      oneOrMore(char).groupedAs('rest'),
+      maybe('/').at.lineEnd()
+    )
+    // maybe(anyOf('tree/', 'blob/')),
+    // maybe(oneOrMore(char).groupedAs('rest')),
+    // maybe('/').at.lineEnd()
   );
 
   const match = url.match(repoRegex);

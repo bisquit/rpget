@@ -10,10 +10,10 @@ export const download: Downloader = async (url) => {
   const tempDir = temporaryDirectory();
 
   if (!rest) {
-    await $`git clone --depth=1 git@github.com:${repo}.git ${tempDir}/0`;
+    await $`git clone --depth=1 git@github.com:${repo}.git ${tempDir}/${repo}`;
     return {
       repo,
-      downloadPath: undefined,
+      downloadPath: `${tempDir}/${repo}`,
       cleanup: () => void 0,
     };
   }
