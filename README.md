@@ -55,7 +55,7 @@ rpget https://github.com/bisquit/rpget
 
 ## Comparison
 
-This tool is initialy inspired by,
+This tool is initialy inspired by
 
 - https://github.com/tiged/tiged
 - https://github.com/unjs/giget
