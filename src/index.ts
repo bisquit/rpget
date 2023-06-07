@@ -8,6 +8,8 @@ import { downloadFromUrl } from './download-from-url';
 const argv = cli({
   name: 'rpget',
 
+  version: pkg.version,
+
   parameters: ['<url>'],
 
   flags: {},
