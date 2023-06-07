@@ -1,24 +1,24 @@
-# rget
+# rpget
 
 Download files from a repository url
 
 ## Install
 
 ```sh
-npm i -g rget
+npm i -g rpget
 ```
 
 ```sh
-yarn global add rget
+yarn global add rpget
 ```
 
 ```sh
-pnpm add -g rget
+pnpm add -g rpget
 ```
 
 ## Usage
 
 ```sh
-# rget <url>
-rget https://github.com/bisquit/rget/tree/main/sample
+# rpget <url>
+rpget https://github.com/bisquit/rpget/tree/main/sample
 ```

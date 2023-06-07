@@ -13,13 +13,13 @@ describe('error', () => {
 });
 
 test.each`
-  url                                                                | repo              | rest
-  ${'https://github.com/bisquit/rget'}                               | ${'bisquit/rget'} | ${undefined}
-  ${'https://github.com/bisquit/rget/'}                              | ${'bisquit/rget'} | ${undefined}
-  ${'https://github.com/bisquit/rget/tree/tests/'}                   | ${'bisquit/rget'} | ${'tests/'}
-  ${'https://github.com/bisquit/rget/tree/tests/basic/src/x'}        | ${'bisquit/rget'} | ${'tests/basic/src/x'}
-  ${'https://github.com/bisquit/rget/blob/tests/basic/src/x/y'}      | ${'bisquit/rget'} | ${'tests/basic/src/x/y'}
-  ${'https://github.com/bisquit/rget/blob/tests/basic/src/x/y/z.ts'} | ${'bisquit/rget'} | ${'tests/basic/src/x/y/z.ts'}
+  url                                                                 | repo               | rest
+  ${'https://github.com/bisquit/rpget'}                               | ${'bisquit/rpget'} | ${undefined}
+  ${'https://github.com/bisquit/rpget/'}                              | ${'bisquit/rpget'} | ${undefined}
+  ${'https://github.com/bisquit/rpget/tree/tests/'}                   | ${'bisquit/rpget'} | ${'tests/'}
+  ${'https://github.com/bisquit/rpget/tree/tests/basic/src/x'}        | ${'bisquit/rpget'} | ${'tests/basic/src/x'}
+  ${'https://github.com/bisquit/rpget/blob/tests/basic/src/x/y'}      | ${'bisquit/rpget'} | ${'tests/basic/src/x/y'}
+  ${'https://github.com/bisquit/rpget/blob/tests/basic/src/x/y/z.ts'} | ${'bisquit/rpget'} | ${'tests/basic/src/x/y/z.ts'}
 `('returns $repo and $rest', async ({ url, repo, rest }) => {
   expect(await parseUrl(url)).toEqual({ repo, rest });
 });

@@ -1,5 +1,5 @@
 {
-  "name": "rget",
+  "name": "rpget",
   "description": "Download files from a repository url",
   "version": "0.0.1",
   "license": "MIT",
@@ -11,10 +11,10 @@
     "dist"
   ],
   "bin": {
-    "rget": "./dist/index.js"
+    "rpget": "./dist/index.js"
   },
   "scripts": {
-    "rget": "tsx src/index.ts",
+    "rpget": "tsx src/index.ts",
     "build": "pnpm typecheck && tsup src/index.ts --format esm --clean",
     "test": "vitest",
     "test:ci": "vitest run",
@@ -75,9 +75,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bisquit/rget.git"
+    "url": "https://github.com/bisquit/rpget.git"
   },
   "bugs": {
-    "url": "https://github.com/bisquit/rget/issues"
+    "url": "https://github.com/bisquit/rpget/issues"
   }
 }

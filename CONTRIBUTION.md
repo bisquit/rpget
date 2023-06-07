@@ -3,9 +3,9 @@
 ```sh
 pnpm i
 
-pnpm rget -h
+pnpm rpget -h
 
-pnpm rget https://github.com/bisquit/rget/tree/tests/basic/src/x
+pnpm rpget https://github.com/bisquit/rpget/tree/tests/basic/src/x
 ```
 
 ## publish

@@ -6,7 +6,7 @@ import * as pkg from '../package.json';
 import { downloadFromUrl } from './download-from-url';
 
 const argv = cli({
-  name: 'rget',
+  name: 'rpget',
 
   parameters: ['<url>'],
 
@@ -14,7 +14,7 @@ const argv = cli({
 
   help: {
     description: pkg.description,
-    examples: ['rget https://github.com/bisquit/rget/tree/main/sample'],
+    examples: ['rpget https://github.com/bisquit/rpget/tree/main/sample'],
   },
 });
 
