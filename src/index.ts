@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { cli } from 'cleye';
 
 import { downloadFromUrl } from './download-from-url';
