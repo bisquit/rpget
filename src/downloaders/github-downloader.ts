@@ -1,4 +1,5 @@
 import { $ } from 'execa';
+import { execa } from 'execa';
 import { temporaryDirectory } from 'tempy';
 
 import { parseUrl } from '../utils/parse-url';
@@ -6,17 +7,47 @@ import { Downloader } from './types';
 
 export const download: Downloader = async (url) => {
   const { repo, rest } = await parseUrl(url);
+  console.log(repo, rest);
 
-  const tempDir = temporaryDirectory();
+  const tempDir = '.'; //temporaryDirectory();
 
-  if (!rest) {
-    await $`git clone --depth=1 git@github.com:${repo}.git ${tempDir}/${repo}`;
-    return {
-      repo,
-      downloadPath: `${tempDir}/${repo}`,
-      cleanup: () => void 0,
-    };
-  }
+  // work
+  // await execa('gh', [
+  //   'api',
+  //   '-H',
+  //   'Accept: application/vnd.github+json',
+  //   '-H',
+  //   'X-GitHub-Api-Version: 2022-11-28',
+  //   '/repos/bisquit/rpget/zipball/9541f14414f10a7d7a2789f529dce6d4bebeaa42',
+  // ]).pipeStdout?.('n.zip');
+
+  const h = await $`gh api ${[
+    '-H',
+    'Accept: application/vnd.github+json',
+    '-H',
+    'X-GitHub-Api-Version: 2022-11-28',
+  ]} /repos/bisquit/rpget/zipball/9541f14414f10a7d7a2789f529dce6d4bebeaa42`.pipeStdout?.(
+    'y.zip'
+  );
+  console.log(h?.command);
+
+  // const s = h.pipeStdout && (await h.pipeStdout('ho.zip'));
+  // console.log('h', h);
+
+  // console.log(s);
+
+  // await $`
+  //   gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/bisquit/rpget/zipball/9541f14414f10a7d7a2789f529dce6d4bebeaa42 > hoge.zip
+  // `;
+
+  // if (!rest) {
+  //   await $`git clone --depth=1 git@github.com:${repo}.git ${tempDir}/${repo}`;
+  //   return {
+  //     repo,
+  //     downloadPath: `${tempDir}/${repo}`,
+  //     cleanup: () => void 0,
+  //   };
+  // }
 
   // `rest` can be a
   // 1. only refs ("main")
@@ -31,28 +62,28 @@ export const download: Downloader = async (url) => {
   // Also, sequential requests are time-consuming, so we prioritized performance over cost.
 
   // e.g. "x/y/z" -> ["x", "x/y", "x/y/z"]
-  const possibleRefs = rest.split('/').map((_, i, arr) => {
-    return arr.slice(0, i + 1).join('/');
-  });
+  // const possibleRefs = rest.split('/').map((_, i, arr) => {
+  //   return arr.slice(0, i + 1).join('/');
+  // });
 
-  const { ref: resolvedRef, i: resolvedIndex } = await Promise.any(
-    possibleRefs.map(async (ref, i) => {
-      await $`git clone --depth=1 -b ${ref} git@github.com:${repo}.git ${tempDir}/${i}`;
-      return { ref, i };
-    })
-  );
+  // const { ref: resolvedRef, i: resolvedIndex } = await Promise.any(
+  //   possibleRefs.map(async (ref, i) => {
+  //     await $`git clone --depth=1 -b ${ref} git@github.com:${repo}.git ${tempDir}/${i}`;
+  //     return { ref, i };
+  //   })
+  // );
 
-  await $`mv ${tempDir}/${resolvedIndex} ${tempDir}/resolved`;
+  // await $`mv ${tempDir}/${resolvedIndex} ${tempDir}/resolved`;
 
-  const subpath = rest.replace(resolvedRef, '');
+  // const subpath = rest.replace(resolvedRef, '');
 
-  return {
-    repo,
-    ref: resolvedRef,
-    subpath: subpath,
-    downloadPath: `${tempDir}/resolved`,
-    cleanup: async () => {
-      await $`rm -rf ${tempDir}`;
-    },
-  };
+  // return {
+  //   repo,
+  //   ref: resolvedRef,
+  //   subpath: subpath,
+  //   downloadPath: `${tempDir}/resolved`,
+  //   cleanup: async () => {
+  //     await $`rm -rf ${tempDir}`;
+  //   },
+  // };
 };

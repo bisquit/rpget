@@ -15,7 +15,7 @@
   },
   "scripts": {
     "rpget": "tsx src/index.ts",
-    "build": "pnpm typecheck && tsup src/index.ts --format esm --clean",
+    "build": "tsup src/index.ts --format esm --clean",
     "test": "vitest",
     "test:ci": "vitest run",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
