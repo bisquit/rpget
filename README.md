@@ -70,7 +70,7 @@ It's much faster than checking with `git fetch` or `git clone`.
 
 This tool is initialy inspired by
 
-- https://github.com/tiged/tiged
+- https://github.com/Rich-Harris/degit
 - https://github.com/unjs/giget
 
 While these are primarily intended for **scaffolding from nothing**, this tool is intended for **copying into existing code**.
