@@ -12,10 +12,14 @@ export async function downloadFromUrl(url: string) {
     const { repo, ref, subpath, downloadPath, cleanup } = await download(url);
 
     s.stop(
-      `Downloaded from
-    repo: ${repo}
-    ref: ${ref}
-    path: ${subpath}`
+      [
+        'Downloaded from',
+        `     repo: ${repo}`,
+        ref && `      ref: ${ref}`,
+        subpath && `      path: ${subpath}`,
+      ]
+        .filter(Boolean)
+        .join('\n')
     );
 
     const confirmed = await confirm({
@@ -28,7 +32,7 @@ export async function downloadFromUrl(url: string) {
       return;
     }
 
-    await copy(`${downloadPath}${subpath}`, '.');
+    await copy(`${downloadPath}${subpath ?? ''}`, '.');
     await cleanup();
     outro(colors.cyan('✔ Successfully copied.'));
 
