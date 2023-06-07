@@ -53,6 +53,18 @@ You can also download overall repo. (It practically equals to "Download ZIP", un
 rpget https://github.com/bisquit/rpget
 ```
 
+## How it works
+
+This tool downloads archive in temp directory using `gh api`, and 
+after user confirmed, decompresses it and copies into current directory.
+
+Because branches can include `/`, we cannot distinguish the URL `main/src` between:
+- a) `main/src` branch
+- b) `main` branch and `src` directory
+
+So this tool attempts to fetch archive with "possible refs" concurrently.
+It's much faster than checking with `git fetch` or `git clone`.
+
 ## Comparison
 
 This tool is initialy inspired by
