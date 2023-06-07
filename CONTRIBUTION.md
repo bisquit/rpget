@@ -5,7 +5,7 @@ pnpm i
 
 pnpm rget -h
 
-pnpm rget https://github.com/bisquit/rget/tree/sample/1/src
+pnpm rget https://github.com/bisquit/rget/tree/tests/basic/src/x
 ```
 
 ## publish
