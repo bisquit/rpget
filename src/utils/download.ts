@@ -8,8 +8,6 @@ export async function download(
 ): Promise<GithubRepositoryComponentsWithDetail> {
   const { repo, rest } = await parseUrl(url);
 
-  console.log(repo, rest);
-
   if (!rest) {
     await $`git clone --depth=1 git@github.com:${repo}.git tmp/0`;
     return {

@@ -1,3 +1,6 @@
+import { intro, spinner } from '@clack/prompts';
+import ora from 'ora';
+
 import { copy } from '../utils/copy';
 import { download } from '../utils/download';
 import { removeTmp } from '../utils/removeTmp';
@@ -14,6 +17,10 @@ import { removeTmp } from '../utils/removeTmp';
  * 4 is client specific, networking, whether you use curl, github cli, and so on
  */
 export async function downloadFromUrl(url: string) {
+  const spinner = ora('Downloading').start();
+  // const s = spinner();
+  // s.start(`download from repository`);
+
   /**
    * TODO: move to test
    */
@@ -29,4 +36,7 @@ export async function downloadFromUrl(url: string) {
   await copy(`tmp/resolved${subpath}`, '.');
 
   await removeTmp();
+
+  // s.stop('Downloaded!');
+  spinner.succeed('Successfully downloaded!');
 }
