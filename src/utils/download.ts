@@ -1,7 +1,7 @@
 import { $ } from 'execa';
 
 import { GithubRepositoryComponentsWithDetail } from '../types';
-import { parseUrl } from '../utils/parseUrl';
+import { parseUrl } from './parseUrl';
 
 export async function download(
   url: string
