@@ -1,13 +1,17 @@
+<div align="center">
+  <img src="./assets/screenshot.png" width="70%" />
+</div>
+
 # rpget
 
 <a href="https://www.npmjs.com/package/rpget"><img src="https://img.shields.io/npm/v/rpget"></a>
 [![CI](https://github.com/bisquit/rpget/actions/workflows/ci.yml/badge.svg)](https://github.com/bisquit/rpget/actions/workflows/ci.yml)
 
-Download files from a repository url
+Download directory or files from a repository URL you are viewing.
 
 ## Requirements
 
-**Github CLI must be installed**
+**Github CLI must be installed.**
 
 ## Limitations
 
@@ -29,16 +33,17 @@ pnpm add -g rpget
 
 ## Usage
 
-Visit repository you want to download, then hit `rpget <url>`.
+Hit `rpget <url>`.
 
 ```sh
-# from branch
+# directory
 rpget https://github.com/bisquit/rpget/tree/main/sample
 
-# from tag
-rpget https://github.com/bisquit/rpget/tree/v0.0.1/sample
+# file
+rpget https://github.com/bisquit/rpget/blob/main/sample/README.md
 
-# from commit
+# tag, commits
+rpget https://github.com/bisquit/rpget/tree/v0.0.1/sample
 rpget https://github.com/bisquit/rpget/tree/9541f14414f10a7d7a2789f529dce6d4bebeaa42/sample
 ```
 
