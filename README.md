@@ -6,9 +6,13 @@ Download files from a repository url
 
 ```sh
 npm i -g rget
-# or
+```
+
+```sh
 yarn global add rget
-# or
+```
+
+```sh
 pnpm add -g rget
 ```
 
@@ -16,9 +20,5 @@ pnpm add -g rget
 
 ```sh
 # rget <url>
-
 rget https://github.com/bisquit/rget/tree/main/sample
-
-ls
-#=> sample
 ```
