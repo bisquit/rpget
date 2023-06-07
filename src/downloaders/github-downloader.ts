@@ -1,53 +1,45 @@
 import { $ } from 'execa';
-import { execa } from 'execa';
-import { temporaryDirectory } from 'tempy';
 
+import { createTempDir } from '../utils/create-temp';
+import { createFileComponents } from '../utils/file-components';
 import { parseUrl } from '../utils/parse-url';
 import { Downloader } from './types';
 
-export const download: Downloader = async (url) => {
-  const { repo, rest } = await parseUrl(url);
-  console.log(repo, rest);
-
-  const tempDir = '.'; //temporaryDirectory();
-
-  // work
-  // await execa('gh', [
-  //   'api',
-  //   '-H',
-  //   'Accept: application/vnd.github+json',
-  //   '-H',
-  //   'X-GitHub-Api-Version: 2022-11-28',
-  //   '/repos/bisquit/rpget/zipball/9541f14414f10a7d7a2789f529dce6d4bebeaa42',
-  // ]).pipeStdout?.('n.zip');
-
-  const h = await $`gh api ${[
+async function getArchive({
+  repo,
+  ref,
+  redirectTo,
+}: {
+  repo: string;
+  ref?: string;
+  redirectTo: string;
+}) {
+  // https://docs.github.com/ja/rest/repos/contents?apiVersion=2022-11-28#download-a-repository-archive-zip
+  await $`gh api ${[
     '-H',
     'Accept: application/vnd.github+json',
     '-H',
     'X-GitHub-Api-Version: 2022-11-28',
-  ]} /repos/bisquit/rpget/zipball/9541f14414f10a7d7a2789f529dce6d4bebeaa42`.pipeStdout?.(
-    'y.zip'
-  );
-  console.log(h?.command);
+  ]} /repos/${repo}/zipball/${ref ?? ''}`.pipeStdout?.(redirectTo);
+}
 
-  // const s = h.pipeStdout && (await h.pipeStdout('ho.zip'));
-  // console.log('h', h);
+export const download: Downloader = async (url) => {
+  const { repo, rest } = await parseUrl(url);
 
-  // console.log(s);
+  const tempDir = await createTempDir();
 
-  // await $`
-  //   gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/bisquit/rpget/zipball/9541f14414f10a7d7a2789f529dce6d4bebeaa42 > hoge.zip
-  // `;
+  if (!rest) {
+    const archiveDist = createFileComponents(`${tempDir}/archive.zip`);
+    await getArchive({ repo, redirectTo: archiveDist.filepath });
 
-  // if (!rest) {
-  //   await $`git clone --depth=1 git@github.com:${repo}.git ${tempDir}/${repo}`;
-  //   return {
-  //     repo,
-  //     downloadPath: `${tempDir}/${repo}`,
-  //     cleanup: () => void 0,
-  //   };
-  // }
+    return {
+      repo,
+      archive: archiveDist,
+      cleanup: async () => {
+        await $`rm -rf ${tempDir}`;
+      },
+    };
+  }
 
   // `rest` can be a
   // 1. only refs ("main")
@@ -57,33 +49,33 @@ export const download: Downloader = async (url) => {
   // branch "main" and directory "src" or
   // branch "main/src"
   //
-  // Here we try to clone the repository with "possible refs" concurrently.
+  // Here we try to request with "possible refs" concurrently, which failed if refs are not found.
   // It will incur extra costs, though, in many cases ref may include at most one or two slashes.
   // Also, sequential requests are time-consuming, so we prioritized performance over cost.
 
   // e.g. "x/y/z" -> ["x", "x/y", "x/y/z"]
-  // const possibleRefs = rest.split('/').map((_, i, arr) => {
-  //   return arr.slice(0, i + 1).join('/');
-  // });
+  const possibleRefs = rest.split('/').map((_, i, arr) => {
+    return arr.slice(0, i + 1).join('/');
+  });
 
-  // const { ref: resolvedRef, i: resolvedIndex } = await Promise.any(
-  //   possibleRefs.map(async (ref, i) => {
-  //     await $`git clone --depth=1 -b ${ref} git@github.com:${repo}.git ${tempDir}/${i}`;
-  //     return { ref, i };
-  //   })
-  // );
+  const { ref: resolvedRef, archive } = await Promise.any(
+    possibleRefs.map(async (ref, i) => {
+      await $`mkdir ${tempDir}/${i}`;
+      const archiveDist = createFileComponents(`${tempDir}/${i}/archive.zip`);
+      await getArchive({ repo, ref, redirectTo: archiveDist.filepath });
+      return { ref, archive: archiveDist };
+    })
+  );
 
-  // await $`mv ${tempDir}/${resolvedIndex} ${tempDir}/resolved`;
+  const subpath = rest.replace(resolvedRef, '');
 
-  // const subpath = rest.replace(resolvedRef, '');
-
-  // return {
-  //   repo,
-  //   ref: resolvedRef,
-  //   subpath: subpath,
-  //   downloadPath: `${tempDir}/resolved`,
-  //   cleanup: async () => {
-  //     await $`rm -rf ${tempDir}`;
-  //   },
-  // };
+  return {
+    repo,
+    ref: resolvedRef,
+    subpath: subpath,
+    archive: archive,
+    cleanup: async () => {
+      await $`rm -rf ${tempDir}`;
+    },
+  };
 };

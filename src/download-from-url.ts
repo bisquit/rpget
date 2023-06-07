@@ -1,4 +1,5 @@
 import { cancel, confirm, isCancel, outro, spinner } from '@clack/prompts';
+import decompress from 'decompress';
 import colors from 'picocolors';
 
 import { download } from './downloaders/github-downloader';
@@ -9,14 +10,14 @@ export async function downloadFromUrl(url: string) {
     const s = spinner();
     s.start('Downloading archive');
 
-    const { repo, ref, subpath, downloadPath, cleanup } = await download(url);
+    const { repo, ref, subpath, archive, cleanup } = await download(url);
 
     s.stop(
       [
-        'Downloaded from',
-        `     repo: ${repo}`,
-        ref && `      ref: ${ref}`,
-        subpath && `      path: ${subpath}`,
+        'Downloaded archive',
+        `      repo - ${repo}`,
+        ref && `      ref  - ${ref}`,
+        subpath && `      path - ${subpath}`,
       ]
         .filter(Boolean)
         .join('\n')
@@ -32,10 +33,17 @@ export async function downloadFromUrl(url: string) {
       return;
     }
 
-    await copy(`${downloadPath}${subpath ?? ''}`, '.');
-    await cleanup();
-    outro(colors.cyan('✔ Successfully copied.'));
+    const reponame = repo.split('/')[1];
+    await decompress(archive.filepath, `${archive.filedir}/${reponame}`, {
+      strip: 1,
+    });
 
+    const copyDist = '.';
+    await copy(`${archive.filedir}/${reponame}${subpath ?? ''}`, copyDist);
+
+    await cleanup();
+
+    outro(colors.cyan('✔ Successfully copied.'));
     process.exit(0);
   } catch (e: unknown) {
     outro(colors.red(`${e}`));
