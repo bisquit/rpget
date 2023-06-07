@@ -9,7 +9,7 @@ export async function downloadFromUrl(url: string) {
     const s = spinner();
     s.start('Downloading archive');
 
-    const { repo, ref, subpath, cleanup } = await download(url);
+    const { repo, ref, subpath, downloadPath, cleanup } = await download(url);
 
     s.stop(
       `Downloaded from
@@ -28,7 +28,7 @@ export async function downloadFromUrl(url: string) {
       return;
     }
 
-    await copy(`tmp/resolved${subpath}`, '.');
+    await copy(`${downloadPath}${subpath}`, '.');
     await cleanup();
     outro(colors.cyan('✔ Successfully copied.'));
 

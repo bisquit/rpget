@@ -1,4 +1,5 @@
 import { $ } from 'execa';
+import { temporaryDirectory } from 'tempy';
 
 import { parseUrl } from '../utils/parse-url';
 import { Downloader } from './types';
@@ -6,10 +7,13 @@ import { Downloader } from './types';
 export const download: Downloader = async (url) => {
   const { repo, rest } = await parseUrl(url);
 
+  const tempDir = temporaryDirectory();
+
   if (!rest) {
-    await $`git clone --depth=1 git@github.com:${repo}.git tmp/0`;
+    await $`git clone --depth=1 git@github.com:${repo}.git ${tempDir}/0`;
     return {
       repo,
+      downloadPath: undefined,
       cleanup: () => void 0,
     };
   }
@@ -33,12 +37,12 @@ export const download: Downloader = async (url) => {
 
   const { ref: resolvedRef, i: resolvedIndex } = await Promise.any(
     possibleRefs.map(async (ref, i) => {
-      await $`git clone --depth=1 -b ${ref} git@github.com:${repo}.git tmp/${i}`;
+      await $`git clone --depth=1 -b ${ref} git@github.com:${repo}.git ${tempDir}/${i}`;
       return { ref, i };
     })
   );
 
-  await $`mv tmp/${resolvedIndex} tmp/resolved`;
+  await $`mv ${tempDir}/${resolvedIndex} ${tempDir}/resolved`;
 
   const subpath = rest.replace(resolvedRef, '');
 
@@ -46,8 +50,9 @@ export const download: Downloader = async (url) => {
     repo,
     ref: resolvedRef,
     subpath: subpath,
+    downloadPath: `${tempDir}/resolved`,
     cleanup: async () => {
-      await $`rm -rf tmp`;
+      await $`rm -rf ${tempDir}`;
     },
   };
 };

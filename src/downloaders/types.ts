@@ -5,8 +5,9 @@ import { RepositoryComponentsWithDetail } from '../types';
  * 1. repository information
  * 2. cleanup
  */
-export type Downloader = (
-  url: string
-) => Promise<
-  RepositoryComponentsWithDetail & { cleanup: () => Promise<void> | void }
+export type Downloader = (url: string) => Promise<
+  RepositoryComponentsWithDetail & {
+    downloadPath?: string;
+    cleanup: () => Promise<void> | void;
+  }
 >;
