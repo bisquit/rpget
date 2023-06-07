@@ -11,11 +11,12 @@ Download directory or files from a repository URL you are viewing.
 
 ## Requirements
 
-**Github CLI must be installed.**
+**Github CLI must be installed and authenticated.**
 
 ## Limitations
 
-Currently only Github is supported.
+- Only Github is supported
+- Only Mac is supported
 
 ## Install
 
