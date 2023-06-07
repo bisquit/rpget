@@ -1,20 +1,43 @@
 import { $ } from 'execa';
-import { temporaryDirectory } from 'tempy';
 
+import { createTempDir } from '../utils/create-temp';
+import { createFileComponents } from '../utils/file-components';
 import { parseUrl } from '../utils/parse-url';
 import { Downloader } from './types';
+
+async function getArchive({
+  repo,
+  ref,
+  redirectTo,
+}: {
+  repo: string;
+  ref?: string;
+  redirectTo: string;
+}) {
+  // https://docs.github.com/ja/rest/repos/contents?apiVersion=2022-11-28#download-a-repository-archive-zip
+  await $`gh api ${[
+    '-H',
+    'Accept: application/vnd.github+json',
+    '-H',
+    'X-GitHub-Api-Version: 2022-11-28',
+  ]} /repos/${repo}/zipball/${ref ?? ''}`.pipeStdout?.(redirectTo);
+}
 
 export const download: Downloader = async (url) => {
   const { repo, rest } = await parseUrl(url);
 
-  const tempDir = temporaryDirectory();
+  const tempDir = await createTempDir();
 
   if (!rest) {
-    await $`git clone --depth=1 git@github.com:${repo}.git ${tempDir}/${repo}`;
+    const archiveDist = createFileComponents(`${tempDir}/archive.zip`);
+    await getArchive({ repo, redirectTo: archiveDist.filepath });
+
     return {
       repo,
-      downloadPath: `${tempDir}/${repo}`,
-      cleanup: () => void 0,
+      archive: archiveDist,
+      cleanup: async () => {
+        await $`rm -rf ${tempDir}`;
+      },
     };
   }
 
@@ -26,7 +49,7 @@ export const download: Downloader = async (url) => {
   // branch "main" and directory "src" or
   // branch "main/src"
   //
-  // Here we try to clone the repository with "possible refs" concurrently.
+  // Here we try to request with "possible refs" concurrently, which failed if refs are not found.
   // It will incur extra costs, though, in many cases ref may include at most one or two slashes.
   // Also, sequential requests are time-consuming, so we prioritized performance over cost.
 
@@ -35,14 +58,14 @@ export const download: Downloader = async (url) => {
     return arr.slice(0, i + 1).join('/');
   });
 
-  const { ref: resolvedRef, i: resolvedIndex } = await Promise.any(
+  const { ref: resolvedRef, archive } = await Promise.any(
     possibleRefs.map(async (ref, i) => {
-      await $`git clone --depth=1 -b ${ref} git@github.com:${repo}.git ${tempDir}/${i}`;
-      return { ref, i };
+      await $`mkdir ${tempDir}/${i}`;
+      const archiveDist = createFileComponents(`${tempDir}/${i}/archive.zip`);
+      await getArchive({ repo, ref, redirectTo: archiveDist.filepath });
+      return { ref, archive: archiveDist };
     })
   );
-
-  await $`mv ${tempDir}/${resolvedIndex} ${tempDir}/resolved`;
 
   const subpath = rest.replace(resolvedRef, '');
 
@@ -50,7 +73,7 @@ export const download: Downloader = async (url) => {
     repo,
     ref: resolvedRef,
     subpath: subpath,
-    downloadPath: `${tempDir}/resolved`,
+    archive: archive,
     cleanup: async () => {
       await $`rm -rf ${tempDir}`;
     },
