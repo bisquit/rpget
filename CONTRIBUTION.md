@@ -12,4 +12,7 @@ pnpm rget https://github.com/bisquit/rget/tree/tests/basic/src/x
 
 ```sh
 pnpm dlx bumpp
+
+pnpm build
+pnpm publish
 ```
