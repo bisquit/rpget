@@ -1,5 +1,8 @@
 # rpget
 
+<a href="https://www.npmjs.com/package/rpget"><img src="https://img.shields.io/npm/v/rpget"></a>
+[![CI](https://github.com/bisquit/rpget/actions/workflows/ci.yml/badge.svg)](https://github.com/bisquit/rpget/actions/workflows/ci.yml)
+
 Download files from a repository url
 
 ## Requirements
