@@ -1,4 +1,4 @@
-import { intro, spinner } from '@clack/prompts';
+import { confirm, outro, spinner } from '@clack/prompts';
 import ora from 'ora';
 
 import { copy } from '../utils/copy';
@@ -17,9 +17,9 @@ import { removeTmp } from '../utils/removeTmp';
  * 4 is client specific, networking, whether you use curl, github cli, and so on
  */
 export async function downloadFromUrl(url: string) {
-  const spinner = ora('Downloading').start();
-  // const s = spinner();
-  // s.start(`download from repository`);
+  // const spinner = ora('Downloading...').start();
+  const s = spinner();
+  s.start('Fetching repository...');
 
   /**
    * TODO: move to test
@@ -31,12 +31,32 @@ export async function downloadFromUrl(url: string) {
 
   // await $`git clone --depth=1 -b sample/1 git@github.com:bisquit/rget.git tmp`;
 
-  const { subpath } = await download(url);
+  const { repo, ref, subpath, cleanup } = await download(url);
+
+  s.stop(
+    `Fetched from
+    repo: ${repo}
+    ref: ${ref}
+    path: ${subpath}`
+  );
+
+  if (
+    !(await confirm({
+      message: `Is that correct?`,
+    }))
+  ) {
+    outro('Copy cancelled.');
+    await cleanup();
+    return;
+  }
+
+  // console.log('subpath is determined', subpath);
 
   await copy(`tmp/resolved${subpath}`, '.');
 
-  await removeTmp();
+  await cleanup();
 
   // s.stop('Downloaded!');
-  spinner.succeed('Successfully downloaded!');
+  // spinner.succeed('Successfully downloaded!');
+  outro('Successfully copied.');
 }

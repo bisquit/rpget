@@ -5,13 +5,14 @@ import { parseUrl } from './parseUrl';
 
 export async function download(
   url: string
-): Promise<GithubRepositoryComponentsWithDetail> {
+): Promise<GithubRepositoryComponentsWithDetail & { cleanup: () => void }> {
   const { repo, rest } = await parseUrl(url);
 
   if (!rest) {
     await $`git clone --depth=1 git@github.com:${repo}.git tmp/0`;
     return {
       repo,
+      cleanup: () => void 0,
     };
   }
 
@@ -47,5 +48,8 @@ export async function download(
     repo,
     ref: resolvedRef,
     subpath: subpath,
+    cleanup: async () => {
+      await $`rm -rf tmp`;
+    },
   };
 }
