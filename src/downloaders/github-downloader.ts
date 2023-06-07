@@ -1,11 +1,9 @@
 import { $ } from 'execa';
 
-import { GithubRepositoryComponentsWithDetail } from '../types';
-import { parseUrl } from './parseUrl';
+import { parseUrl } from '../utils/parse-url';
+import { Downloader } from './types';
 
-export async function download(
-  url: string
-): Promise<GithubRepositoryComponentsWithDetail & { cleanup: () => void }> {
+export const download: Downloader = async (url) => {
   const { repo, rest } = await parseUrl(url);
 
   if (!rest) {
@@ -52,4 +50,4 @@ export async function download(
       await $`rm -rf tmp`;
     },
   };
-}
+};

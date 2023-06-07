@@ -7,11 +7,11 @@ import {
   oneOrMore,
 } from 'magic-regexp';
 
-import { GithubRepositoryComponentsWithRest } from '../types';
+import { RepositoryComponentsWithRest } from '../types';
 
 export async function parseUrl(
   url: string
-): Promise<GithubRepositoryComponentsWithRest> {
+): Promise<RepositoryComponentsWithRest> {
   const repoRegex = createRegExp(
     'https://github.com/',
     oneOrMore(charNotIn('/'))
