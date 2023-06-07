@@ -10,4 +10,6 @@ pnpm rget https://github.com/bisquit/rget/tree/tests/basic/src/x
 
 ## publish
 
-WIP
+```sh
+pnpm dlx bumpp
+```

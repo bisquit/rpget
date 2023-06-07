@@ -28,10 +28,9 @@ export async function downloadFromUrl(url: string) {
       return;
     }
 
-    s.start('Copying files');
     await copy(`tmp/resolved${subpath}`, '.');
     await cleanup();
-    s.stop(colors.cyan('Successfully copied.'));
+    outro(colors.cyan('✔ Successfully copied.'));
 
     process.exit(0);
   } catch (e: unknown) {

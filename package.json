@@ -1,6 +1,6 @@
 {
   "name": "rget",
-  "description": "Get files from a repository url",
+  "description": "Download files from a repository url",
   "version": "0.0.0",
   "license": "MIT",
   "type": "module",
@@ -15,7 +15,7 @@
   },
   "scripts": {
     "rget": "tsx src/index.ts",
-    "build": "tsup src/index.ts --format esm --clean",
+    "build": "pnpm typecheck && tsup src/index.ts --format esm --clean",
     "test": "vitest",
     "test:ci": "vitest run",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
