@@ -22,6 +22,8 @@ test.each`
   ${'https://github.com/bisquit/rpget/tree/tests/basic/src/x'}        | ${'bisquit/rpget'} | ${'tests/basic/src/x'}
   ${'https://github.com/bisquit/rpget/blob/tests/basic/src/x/y'}      | ${'bisquit/rpget'} | ${'tests/basic/src/x/y'}
   ${'https://github.com/bisquit/rpget/blob/tests/basic/src/x/y/z.ts'} | ${'bisquit/rpget'} | ${'tests/basic/src/x/y/z.ts'}
+  ${'https://github.com/bisquit/rpget/blob/v0.0.1/index.ts'}          | ${'bisquit/rpget'} | ${'v0.0.1/index.ts'}
+  ${'https://github.com/bisquit/rpget/tree/9541f1/index.ts'}          | ${'bisquit/rpget'} | ${'9541f1/index.ts'}
 `('returns $repo and $rest', async ({ url, repo, rest }) => {
   expect(await parseUrl(url)).toEqual({ repo, rest });
 });
