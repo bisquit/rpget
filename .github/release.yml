@@ -2,10 +2,7 @@ changelog:
   categories:
     - title: Bug Fixes
       labels:
-        - bug
+        - 'Type: Bug Fix'
     - title: Features
       labels:
-        - feat
-    - title: Others
-      labels:
-        - '*'
+        - 'Type: Feature'
