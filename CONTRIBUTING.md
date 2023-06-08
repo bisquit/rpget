@@ -4,9 +4,9 @@
 # Install dependencies
 pnpm i
 
-# Run local version (src/index.ts)
-pnpm rpget
-pnpm rpget https://github.com/bisquit/rpget/tree/tests/basic/src/x
+# Run src (index.ts) directly
+pnpm dev
+pnpm dev https://github.com/bisquit/rpget/tree/tests/basic/src/x
 ```
 
 ### Testing
@@ -23,7 +23,10 @@ pnpm test
 pnpm link
 
 # watch build
+## normal build (which is the same as production shipped)
 pnpm build --watch
+## debug mode (log extra informations)
+pnpm build:debug --watch
 
 # Then, cd any directory
 rpget
