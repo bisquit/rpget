@@ -2,6 +2,7 @@ import { $ } from 'execa';
 
 import { createTempDir } from '../../utils/create-temp';
 import { createFileComponents } from '../../utils/file-components';
+import { createPossibleRefs } from '../../utils/possible-refs';
 import { Downloader } from './types';
 
 async function getArchive({
@@ -38,22 +39,7 @@ export const download: Downloader = async (repo: string, rest?: string) => {
     };
   }
 
-  // `rest` can be a
-  // 1. only refs ("main")
-  // 2. refs and dir ("main/src", "feat/1/src")
-  //
-  // Because branch can include "/", we cannot determine "main/src" means
-  // branch "main" and directory "src" or
-  // branch "main/src"
-  //
-  // Here we try to request with "possible refs" concurrently, which failed if refs are not found.
-  // It will incur extra costs, though, in many cases ref may include at most one or two slashes.
-  // Also, sequential requests are time-consuming, so we prioritized performance over cost.
-
-  // e.g. "x/y/z" -> ["x", "x/y", "x/y/z"]
-  const possibleRefs = rest.split('/').map((_, i, arr) => {
-    return arr.slice(0, i + 1).join('/');
-  });
+  const possibleRefs = createPossibleRefs(rest);
 
   const { ref: resolvedRef, archive } = await Promise.any(
     possibleRefs.map(async (ref, i) => {
