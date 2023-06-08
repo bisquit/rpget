@@ -79,7 +79,7 @@ Because branches can include `/`, we cannot distinguish the URL `main/src` betwe
 - a) `main/src` branch
 - b) `main` branch and `src` directory
 
-So this tool attempts to fetch archive with "possible refs" concurrently.
+So this tool attempts to fetch archive with "possible refs" concurrently. (in this case, `main` and `main/src`)
 It's much faster than checking with `git fetch` or `git clone`.
 
 ## Comparison
