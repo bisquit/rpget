@@ -13,6 +13,9 @@
   "bin": {
     "rpget": "./dist/index.js"
   },
+  "engines": {
+    "node": ">=16"
+  },
   "scripts": {
     "rpget": "tsx src/index.ts",
     "build": "tsup src/index.ts --format esm --clean",
