@@ -82,5 +82,13 @@
   },
   "bugs": {
     "url": "https://github.com/bisquit/rpget/issues"
-  }
+  },
+  "keywords": [
+    "cli",
+    "download",
+    "repo",
+    "repository",
+    "github",
+    "gitlab"
+  ]
 }
