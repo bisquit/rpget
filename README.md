@@ -11,9 +11,9 @@ Download directory or files from a repository URL you are viewing.
 
 ## Features
 
-- Download file, directory or even entire repository
+- Download file, directory or even entire repository.
 - With a single command and just a URL. You don't need to remember.
-- Support both GitHub and GitLab
+- Support both GitHub and GitLab.
 
 **Currently supported for Mac only.**
 
@@ -24,7 +24,7 @@ The corresponding CLI must be installed, and also authenticated if you want to d
 - For GitHub, install [GitHub CLI](https://cli.github.com/)
 - For GitLab, install [GLab](https://gitlab.com/gitlab-org/cli)
 
-* You only need to install what you use.
+You only need to install what you use.
 
 ## Install
 
@@ -71,7 +71,7 @@ rpget https://github.com/bisquit/rpget
 
 ## How it works
 
-This tool downloads archive(.zip) into a temp directory using `gh api`, and
+This tool downloads archive(.zip) into a temp directory using API, and
 after user confirmed, decompresses it and copies into current directory.
 
 Because branches can include `/`, we cannot distinguish the URL `main/src` between:
