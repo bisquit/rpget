@@ -1,8 +1,7 @@
 import { $ } from 'execa';
 
-import { createTempDir } from '../utils/create-temp';
-import { createFileComponents } from '../utils/file-components';
-import { parseUrl } from '../utils/parse-url';
+import { createTempDir } from '../../utils/create-temp';
+import { createFileComponents } from '../../utils/file-components';
 import { Downloader } from './types';
 
 async function getArchive({
@@ -23,9 +22,7 @@ async function getArchive({
   ]} /repos/${repo}/zipball/${ref ?? ''}`.pipeStdout?.(redirectTo);
 }
 
-export const download: Downloader = async (url) => {
-  const { repo, rest } = await parseUrl(url);
-
+export const download: Downloader = async (repo: string, rest?: string) => {
   const tempDir = await createTempDir();
 
   if (!rest) {
