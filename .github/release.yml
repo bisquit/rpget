@@ -6,3 +6,6 @@ changelog:
     - title: Features
       labels:
         - 'Type: Feature'
+    - title: Others
+      labels:
+        - "*"
