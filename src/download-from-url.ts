@@ -1,10 +1,20 @@
-import { cancel, confirm, isCancel, log, outro, spinner } from '@clack/prompts';
+import {
+  cancel,
+  confirm,
+  isCancel,
+  log,
+  note,
+  outro,
+  spinner,
+} from '@clack/prompts';
 import decompress from 'decompress';
 import colors from 'picocolors';
 
 import { downloaderFor } from './core/downloaders';
 import { parseUrl } from './core/parse-url';
 import { copy } from './utils/copy';
+import { createTempDir } from './utils/create-temp';
+import { debugLog } from './utils/debug';
 
 export async function downloadFromUrl(url: string) {
   try {
@@ -12,13 +22,17 @@ export async function downloadFromUrl(url: string) {
 
     log.info(`Detected ${provider} url`);
 
+    const archiveDir = await createTempDir();
+    debugLog({ archiveDir });
+
     const s = spinner();
     s.start(`Downloading archive`);
 
-    const { ref, subpath, archive, cleanup } = await downloaderFor(provider)(
+    const { ref, subpath, archive, cleanup } = await downloaderFor(provider)({
       repo,
-      rest
-    );
+      rest,
+      archiveDir,
+    });
 
     s.stop(
       [

@@ -2,14 +2,19 @@ import { RepositoryComponentsWithDetail } from '../../types';
 import { FileComponents } from '../../utils/file-components';
 
 /**
- * Downloader should return
- * 1. repository information
- * 2. archive path and cleanup
+ * Downloader receives
+ * - incomplete repository information
+ * - directory that archive saved for
+ *
+ * and do
+ * - get a repository detailed and return
+ * - download archive and save to directory
  */
-export type Downloader = (
-  repo: string,
-  rest?: string
-) => Promise<
+export type Downloader = (props: {
+  repo: string;
+  rest?: string;
+  archiveDir: string;
+}) => Promise<
   RepositoryComponentsWithDetail & {
     archive: FileComponents;
     cleanup: () => Promise<void> | void;
