@@ -1,6 +1,5 @@
 import { $ } from 'execa';
 
-import { createTempDir } from '../../utils/create-temp';
 import { createFileComponents } from '../../utils/file-components';
 import { createPossibleRefs } from '../../utils/possible-refs';
 import { Downloader } from './types';

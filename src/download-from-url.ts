@@ -1,12 +1,4 @@
-import {
-  cancel,
-  confirm,
-  isCancel,
-  log,
-  note,
-  outro,
-  spinner,
-} from '@clack/prompts';
+import { cancel, confirm, isCancel, log, outro, spinner } from '@clack/prompts';
 import decompress from 'decompress';
 import colors from 'picocolors';
 
