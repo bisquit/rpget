@@ -42,6 +42,6 @@ pnpm rm -g rpget
 ## publish
 
 ```sh
-pnpm dlx bumpp
+pnpm release
 #==> tag push triggers publish github actions
 ```
