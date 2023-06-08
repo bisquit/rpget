@@ -1,3 +1,5 @@
+export type Provider = 'github' | 'gitlab';
+
 export type RepositoryComponentsBase = {
   /**
    * repository name with an account or organization

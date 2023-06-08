@@ -9,14 +9,22 @@
 
 Download directory or files from a repository URL you are viewing.
 
+## Features
+
+- Download file, directory or even entire repository
+- With a single command and just a URL. You don't need to remember.
+- Support both GitHub and GitLab
+
+**Currently supported for Mac only.**
+
 ## Requirements
 
-**Github CLI must be installed and authenticated.**
+The corresponding CLI must be installed, and also authenticated if you want to download from private repositories.
 
-## Limitations
+- For GitHub, install [GitHub CLI](https://cli.github.com/)
+- For GitLab, install [GLab](https://gitlab.com/gitlab-org/cli)
 
-- Only Github is supported
-- Only Mac is supported
+* You only need to install what you use.
 
 ## Install
 
@@ -37,9 +45,16 @@ pnpm add -g rpget
 Hit `rpget <url>`.
 
 ```sh
-# directory
+# GitHub
 rpget https://github.com/bisquit/rpget/tree/main/sample
 
+# GitLab
+rpget https://gitlab.com/bisquit-lab/rpget-test/-/tree/main/sample
+```
+
+You can specify file, tag or commits.
+
+```sh
 # file
 rpget https://github.com/bisquit/rpget/blob/main/sample/README.md
 
@@ -56,10 +71,11 @@ rpget https://github.com/bisquit/rpget
 
 ## How it works
 
-This tool downloads archive(.zip) into a temp directory using `gh api`, and 
+This tool downloads archive(.zip) into a temp directory using `gh api`, and
 after user confirmed, decompresses it and copies into current directory.
 
 Because branches can include `/`, we cannot distinguish the URL `main/src` between:
+
 - a) `main/src` branch
 - b) `main` branch and `src` directory
 

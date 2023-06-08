@@ -1,16 +1,24 @@
-import { cancel, confirm, isCancel, outro, spinner } from '@clack/prompts';
+import { cancel, confirm, isCancel, log, outro, spinner } from '@clack/prompts';
 import decompress from 'decompress';
 import colors from 'picocolors';
 
-import { download } from './downloaders/github-downloader';
+import { downloaderFor } from './core/downloaders';
+import { parseUrl } from './core/parse-url';
 import { copy } from './utils/copy';
 
 export async function downloadFromUrl(url: string) {
   try {
-    const s = spinner();
-    s.start('Downloading archive');
+    const { provider, repo, rest } = await parseUrl(url);
 
-    const { repo, ref, subpath, archive, cleanup } = await download(url);
+    log.info(`Detected ${provider} url`);
+
+    const s = spinner();
+    s.start(`Downloading archive`);
+
+    const { ref, subpath, archive, cleanup } = await downloaderFor(provider)(
+      repo,
+      rest
+    );
 
     s.stop(
       [
