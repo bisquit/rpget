@@ -6,6 +6,7 @@
 
 <a href="https://www.npmjs.com/package/rpget"><img src="https://img.shields.io/npm/v/rpget"></a>
 [![CI](https://github.com/bisquit/rpget/actions/workflows/ci.yml/badge.svg)](https://github.com/bisquit/rpget/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/bisquit/rpget/branch/main/graph/badge.svg?token=CLG9UC6RG9)](https://codecov.io/gh/bisquit/rpget)
 
 Download a directory or file from a repository URL you are viewing.
 
