@@ -1,4 +1,4 @@
-import { cancel, confirm, isCancel, log, outro, spinner } from '@clack/prompts';
+import { cancel, isCancel, confirm, log, outro, spinner } from '@clack/prompts';
 import decompress from 'decompress';
 import colors from 'picocolors';
 
@@ -7,6 +7,7 @@ import { parseUrl } from './core/parse-url';
 import { copy } from './utils/copy';
 import { createTempDir } from './utils/create-temp';
 import { debugLog } from './utils/debug';
+import { rmrf } from './utils/rm';
 
 export async function downloadFromUrl(url: string) {
   try {
@@ -17,10 +18,21 @@ export async function downloadFromUrl(url: string) {
     const archiveDir = await createTempDir();
     debugLog({ archiveDir });
 
+    const cleanup = async () => {
+      await rmrf(archiveDir);
+    };
+
+    // because windows won't be terminated by @clack/prompts `isCancel`,
+    // manually hook terminated event and cleanup.
+    process.on('SIGINT', async () => {
+      await cleanup();
+      process.exit(1);
+    });
+
     const s = spinner();
     s.start(`Downloading archive`);
 
-    const { ref, subpath, archive, cleanup } = await downloaderFor(provider)({
+    const { ref, subpath, archive } = await downloaderFor(provider)({
       repo,
       rest,
       archiveDir,

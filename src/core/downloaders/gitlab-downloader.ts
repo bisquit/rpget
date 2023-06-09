@@ -34,9 +34,6 @@ export const download: Downloader = async ({ repo, rest, archiveDir }) => {
       return {
         repo,
         archive: archiveDist,
-        cleanup: async () => {
-          await $`rm -rf ${archiveDir}`;
-        },
       };
     }
 
@@ -60,9 +57,6 @@ export const download: Downloader = async ({ repo, rest, archiveDir }) => {
       ref: resolvedRef,
       subpath: subpath,
       archive: archive,
-      cleanup: async () => {
-        await $`rm -rf ${archiveDir}`;
-      },
     };
   } catch (e) {
     await $`rm -rf ${archiveDir}`;

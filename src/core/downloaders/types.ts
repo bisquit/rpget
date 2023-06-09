@@ -17,6 +17,5 @@ export type Downloader = (props: {
 }) => Promise<
   RepositoryComponentsWithDetail & {
     archive: FileComponents;
-    cleanup: () => Promise<void> | void;
   }
 >;
