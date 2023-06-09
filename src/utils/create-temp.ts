@@ -1,5 +1,16 @@
 import { temporaryDirectory } from 'tempy';
 
-export async function createTempDir(): Promise<string> {
-  return temporaryDirectory();
+import { rmrf } from './rm';
+
+export async function createTempDir(): Promise<{
+  dir: string;
+  cleanup: () => void;
+}> {
+  const dir = temporaryDirectory();
+
+  const cleanup = async () => {
+    await rmrf(dir);
+  };
+
+  return { dir, cleanup };
 }

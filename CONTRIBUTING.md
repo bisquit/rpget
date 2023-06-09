@@ -9,18 +9,22 @@ pnpm dev
 pnpm dev https://github.com/bisquit/rpget/tree/tests/basic/src/x
 ```
 
-### Testing
+### Unit Testing
 
 ```sh
 # Unit test
 pnpm test
 ```
 
+### E2E
+
+[HERE](e2e/README.md)
+
 ### Test local build version behavior
 
 ```sh
 # linking this pkg to global
-pnpm link
+pnpm link -g
 
 # watch build
 ## normal build (which is the same as production shipped)
