@@ -20,10 +20,12 @@ Download a directory or file from a repository URL you are viewing.
 
 ## Requirements
 
-The corresponding CLI must be installed, and also authenticated if you want to download from private repositories.
+The corresponding CLI must be installed and authenticated.
 
 - For GitHub, install [GitHub CLI](https://cli.github.com/)
+  - then [`gh auth login`](https://cli.github.com/manual/gh_auth_login) 
 - For GitLab, install [GLab](https://gitlab.com/gitlab-org/cli)
+  - then [`glab auth login`](https://gitlab.com/gitlab-org/cli#authentication)
 
 You only need to install what you use.
 
