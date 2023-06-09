@@ -26,46 +26,35 @@ async function getArchive({
 }
 
 export const download: Downloader = async ({ repo, rest, archiveDir }) => {
-  try {
-    if (!rest) {
-      const archiveDist = createFileComponents(`${archiveDir}/archive.zip`);
-      await getArchive({ repo, redirectTo: archiveDist.filepath });
-
-      return {
-        repo,
-        archive: archiveDist,
-        cleanup: async () => {
-          await $`rm -rf ${archiveDir}`;
-        },
-      };
-    }
-
-    const possibleRefs = createPossibleRefs(rest);
-
-    const { ref: resolvedRef, archive } = await Promise.any(
-      possibleRefs.map(async (ref, i) => {
-        await $`mkdir ${archiveDir}/${i}`;
-        const archiveDist = createFileComponents(
-          `${archiveDir}/${i}/archive.zip`
-        );
-        await getArchive({ repo, ref, redirectTo: archiveDist.filepath });
-        return { ref, archive: archiveDist };
-      })
-    );
-
-    const subpath = rest.replace(resolvedRef, '');
+  if (!rest) {
+    const archiveDist = createFileComponents(`${archiveDir}/archive.zip`);
+    await getArchive({ repo, redirectTo: archiveDist.filepath });
 
     return {
       repo,
-      ref: resolvedRef,
-      subpath: subpath,
-      archive: archive,
-      cleanup: async () => {
-        await $`rm -rf ${archiveDir}`;
-      },
+      archive: archiveDist,
     };
-  } catch (e) {
-    await $`rm -rf ${archiveDir}`;
-    throw e;
   }
+
+  const possibleRefs = createPossibleRefs(rest);
+
+  const { ref: resolvedRef, archive } = await Promise.any(
+    possibleRefs.map(async (ref, i) => {
+      await $`mkdir ${archiveDir}/${i}`;
+      const archiveDist = createFileComponents(
+        `${archiveDir}/${i}/archive.zip`
+      );
+      await getArchive({ repo, ref, redirectTo: archiveDist.filepath });
+      return { ref, archive: archiveDist };
+    })
+  );
+
+  const subpath = rest.replace(resolvedRef, '');
+
+  return {
+    repo,
+    ref: resolvedRef,
+    subpath: subpath,
+    archive: archive,
+  };
 };

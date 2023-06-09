@@ -14,48 +14,64 @@ export async function downloadFromUrl(url: string) {
 
     log.info(`Detected ${provider} url`);
 
-    const archiveDir = await createTempDir();
+    const { dir: archiveDir, cleanup: archiveDirCleanup } =
+      await createTempDir();
     debugLog({ archiveDir });
 
-    const s = spinner();
-    s.start(`Downloading archive`);
+    const cancelProcess = async () => {
+      await archiveDirCleanup();
+      cancel('Cancelled.');
+      process.exit(0);
+    };
 
-    const { ref, subpath, archive, cleanup } = await downloaderFor(provider)({
-      repo,
-      rest,
-      archiveDir,
+    // because windows won't be terminated by @clack/prompts `isCancel`,
+    // manually hook terminated event and cleanup.
+    process.on('SIGINT', async () => {
+      debugLog('SIGINT');
+      await cancelProcess();
     });
 
-    s.stop(
-      [
-        'Downloaded archive',
-        `      repo - ${repo}`,
-        ref && `      ref  - ${ref}`,
-        subpath && `      path - ${subpath}`,
-      ]
-        .filter(Boolean)
-        .join('\n')
-    );
+    try {
+      const s = spinner();
+      s.start(`Downloading archive`);
 
-    const confirmed = await confirm({
-      message: `Proceed to copy?`,
-    });
+      const { ref, subpath, archive } = await downloaderFor(provider)({
+        repo,
+        rest,
+        archiveDir,
+      });
 
-    if (!confirmed || isCancel(confirmed)) {
-      await cleanup();
-      cancel('Copy cancelled.');
-      return;
+      s.stop(
+        [
+          'Downloaded archive',
+          `      repo - ${repo}`,
+          ref && `      ref  - ${ref}`,
+          subpath && `      path - ${subpath}`,
+        ]
+          .filter(Boolean)
+          .join('\n')
+      );
+
+      const confirmed = await confirm({
+        message: `Proceed to copy?`,
+      });
+
+      if (!confirmed || isCancel(confirmed)) {
+        await cancelProcess();
+      }
+
+      const reponame = repo.split('/')[1];
+      await decompress(archive.filepath, `${archive.filedir}/${reponame}`, {
+        strip: 1,
+      });
+
+      const copyDist = '.';
+      await copy(`${archive.filedir}/${reponame}${subpath ?? ''}`, copyDist);
+      await archiveDirCleanup();
+    } catch (e) {
+      await archiveDirCleanup();
+      throw e;
     }
-
-    const reponame = repo.split('/')[1];
-    await decompress(archive.filepath, `${archive.filedir}/${reponame}`, {
-      strip: 1,
-    });
-
-    const copyDist = '.';
-    await copy(`${archive.filedir}/${reponame}${subpath ?? ''}`, copyDist);
-
-    await cleanup();
 
     outro(colors.cyan('✔ Successfully copied.'));
     process.exit(0);
