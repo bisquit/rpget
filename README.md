@@ -7,11 +7,11 @@
 <a href="https://www.npmjs.com/package/rpget"><img src="https://img.shields.io/npm/v/rpget"></a>
 [![CI](https://github.com/bisquit/rpget/actions/workflows/ci.yml/badge.svg)](https://github.com/bisquit/rpget/actions/workflows/ci.yml)
 
-Download a directory from a repository URL you are viewing.
+Download a directory or file from a repository URL you are viewing.
 
 ## Features
 
-- Download a file, directory or even entire repository.
+- Download a directory, file or even entire repository.
 - With a single command and just a URL. You don't need to remember.
 - Support both GitHub and GitLab.
 
@@ -52,7 +52,7 @@ rpget https://github.com/bisquit/rpget/tree/main/sample
 rpget https://gitlab.com/bisquit-lab/rpget-test/-/tree/main/sample
 ```
 
-You can specify file, tag or commits.
+You can specify file, tag or commits. Just hit the URL you want.
 
 ```sh
 # file
@@ -79,7 +79,7 @@ Because branches can include `/`, we cannot distinguish the URL `main/src` betwe
 - a) `main/src` branch
 - b) `main` branch and `src` directory
 
-So this tool attempts to fetch archive with "possible refs" concurrently. (in this case, `main` and `main/src`)
+So this tool attempts to fetch archive with "possible refs" concurrently (in this case, `main` and `main/src`).
 It's much faster than checking with `git fetch` or `git clone`.
 
 ## Comparison
