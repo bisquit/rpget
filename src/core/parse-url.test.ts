@@ -2,22 +2,6 @@ import { describe, expect, test } from 'vitest';
 
 import { parseGithubUrl, parseGitlabUrl, parseUrl } from './parse-url';
 
-describe('common error', () => {
-  test.each(['https://google.com'])(
-    'should throw invalid url error',
-    async (url) => {
-      await expect(() => parseUrl(url)).rejects.toThrowError('url');
-    }
-  );
-
-  test.each(['https://bitbucket.org/bisquit/rpget/src/master'])(
-    'should throw unsupported error',
-    async (url) => {
-      await expect(() => parseUrl(url)).rejects.toThrowError('not supported');
-    }
-  );
-});
-
 describe('detect provider', () => {
   test('github', async () => {
     expect((await parseUrl('https://github.com/bisquit/rpget')).provider).toBe(
@@ -28,6 +12,18 @@ describe('detect provider', () => {
   test('gitlab', async () => {
     expect((await parseUrl('https://gitlab.com/bisquit/rpget')).provider).toBe(
       'gitlab'
+    );
+  });
+
+  test('bitbucket', async () => {
+    await expect(() =>
+      parseUrl('https://bitbucket.org/bisquit/rpget/src/master')
+    ).rejects.toThrowError('not supported');
+  });
+
+  test('others', async () => {
+    await expect(() => parseUrl('https://google.com')).rejects.toThrowError(
+      'url'
     );
   });
 });
