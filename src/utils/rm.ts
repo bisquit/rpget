@@ -1,5 +1,5 @@
-import { $ } from 'execa';
+import { deleteAsync } from 'del';
 
 export async function rmrf(dist: string) {
-  await $`shx rm -rf ${dist}`;
+  await deleteAsync(dist, { force: true });
 }
