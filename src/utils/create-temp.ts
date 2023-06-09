@@ -4,7 +4,7 @@ import { rmrf } from './rm';
 
 export async function createTempDir(): Promise<{
   dir: string;
-  cleanup: () => void;
+  cleanup: () => Promise<void>;
 }> {
   const dir = temporaryDirectory();
 

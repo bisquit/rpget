@@ -27,7 +27,8 @@ export async function downloadFromUrl(url: string) {
     // because windows won't be terminated by @clack/prompts `isCancel`,
     // manually hook terminated event and cleanup.
     process.on('SIGINT', async () => {
-      cancelProcess();
+      debugLog('SIGINT');
+      await cancelProcess();
     });
 
     try {
@@ -56,7 +57,7 @@ export async function downloadFromUrl(url: string) {
       });
 
       if (!confirmed || isCancel(confirmed)) {
-        cancelProcess();
+        await cancelProcess();
       }
 
       const reponame = repo.split('/')[1];
@@ -66,7 +67,6 @@ export async function downloadFromUrl(url: string) {
 
       const copyDist = '.';
       await copy(`${archive.filedir}/${reponame}${subpath ?? ''}`, copyDist);
-
       await archiveDirCleanup();
     } catch (e) {
       await archiveDirCleanup();
