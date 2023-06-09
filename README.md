@@ -7,11 +7,11 @@
 <a href="https://www.npmjs.com/package/rpget"><img src="https://img.shields.io/npm/v/rpget"></a>
 [![CI](https://github.com/bisquit/rpget/actions/workflows/ci.yml/badge.svg)](https://github.com/bisquit/rpget/actions/workflows/ci.yml)
 
-Download directory or files from a repository URL you are viewing.
+Download a directory from a repository URL you are viewing.
 
 ## Features
 
-- Download file, directory or even entire repository.
+- Download a file, directory or even entire repository.
 - With a single command and just a URL. You don't need to remember.
 - Support both GitHub and GitLab.
 
