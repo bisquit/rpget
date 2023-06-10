@@ -1,5 +1,5 @@
 import { RepositoryComponentsWithDetail } from '../../types';
-import { FileComponents } from '../../utils/file-components';
+import { FileComponents } from '../file-components';
 
 /**
  * Downloader receives

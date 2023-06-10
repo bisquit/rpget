@@ -1,14 +1,14 @@
 import { Provider } from '../../types';
-import { download as githubDownload } from './github-downloader';
-import { download as gitlabDownload } from './gitlab-downloader';
+import { downloader as githubDownloader } from './github/downloader';
+import { downloader as gitlabDownloader } from './gitlab/downloader';
 import { Downloader } from './types';
 
 export function downloaderFor(provider: Provider): Downloader {
   switch (provider) {
     case 'github':
-      return githubDownload;
+      return githubDownloader;
     case 'gitlab':
-      return gitlabDownload;
+      return gitlabDownloader;
     default:
       throw new Error('downloader not defined.');
   }
