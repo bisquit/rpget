@@ -27,6 +27,14 @@ You only need to install what you use.
 
 ## Install
 
+You can quickly try with `npx`
+
+```sh
+npx rpget@latest https://github.com/bisquit/rpget/tree/main/sample
+```
+
+or install globally
+
 ```sh
 npm i -g rpget
 ```
@@ -46,6 +54,8 @@ Hit `rpget <url>`.
 ```sh
 rpget https://github.com/bisquit/rpget/tree/main/sample
 ```
+
+See [examples](https://github.com/bisquit/rpget/blob/main/e2e/README.md#for-github).
 
 ## How it works
 
