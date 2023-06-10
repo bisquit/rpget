@@ -1,5 +1,5 @@
-import { createFileComponents } from '../../file-components';
 import { mkdir } from '../../../utils/mkdir';
+import { createFileComponents } from '../../file-components';
 import { createPossibleRefs } from '../../possible-refs';
 import { Downloader } from '../types';
 import { getArchive } from './get-archive';
