@@ -4,7 +4,7 @@ Curretly, E2E is hand-testing for cross patterns.
 
 - Platform (Mac, Win)
 - Provider (GitHub, GitLab)
-- Download (directory, entire repository, cancel, error)
+- Download (directory, file, entire repository, cancel, error)
 
 ## Setup
 
@@ -38,6 +38,10 @@ Also, authenticate GitHub CLI and GLab CLI.
 rpget https://github.com/bisquit/rpget/tree/main/sample
 #==> sample
 
+# GitHub x file
+rpget https://github.com/bisquit/rpget/blob/main/sample/README.md
+#==> README.md
+
 # GitHub x root
 rpget https://github.com/bisquit/rpget
 #==> rpget
@@ -59,6 +63,10 @@ rpget https://github.com/bisquit/rpget/tree/m
 # GitLab x directoy
 rpget https://gitlab.com/bisquit-lab/rpget-test/-/tree/main/sample
 #==> sample
+
+# GitLab x file
+rpget https://gitlab.com/bisquit-lab/rpget-test/-/tree/main/sample/README.md
+#==> README.md
 
 # GitLab x root
 rpget https://gitlab.com/bisquit-lab/rpget-test
