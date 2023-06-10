@@ -70,7 +70,8 @@ export async function downloadFromUrl(url: string) {
       await archiveDirCleanup();
     } catch (e) {
       await archiveDirCleanup();
-      throw e;
+      const message = createErrorMessage(e);
+      throw new Error(message);
     }
 
     outro(colors.cyan('✔ Successfully copied.'));
@@ -78,5 +79,21 @@ export async function downloadFromUrl(url: string) {
   } catch (e: unknown) {
     outro(colors.red(`${e}`));
     process.exit(1);
+  }
+}
+
+function createErrorMessage(e: unknown): string {
+  const singleErrorMessage = (e: unknown) => {
+    if ('stderr' in (e as any)) {
+      return (e as any).stderr;
+    }
+
+    return (e as Error).message;
+  };
+
+  if (e instanceof AggregateError) {
+    return singleErrorMessage(e.errors[0]);
+  } else {
+    return singleErrorMessage(e);
   }
 }
