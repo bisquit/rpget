@@ -8,15 +8,11 @@
 [![CI](https://github.com/bisquit/rpget/actions/workflows/ci.yml/badge.svg)](https://github.com/bisquit/rpget/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/bisquit/rpget/branch/main/graph/badge.svg?token=CLG9UC6RG9)](https://codecov.io/gh/bisquit/rpget)
 
-Download a directory or file from a repository URL you are viewing.
+Download a directory or file from a repository URL you are viewing:
 
-## Features
-
-- Download a directory, file or even entire repository.
-- With a single command and just a URL. You don't need to remember.
-- Support both GitHub and GitLab.
-
-**Currently supported for Mac only.**
+- Single command, any URL
+- Support both GitHub and GitLab
+- Cross platform (macOS, Windows)
 
 ## Requirements
 
@@ -48,50 +44,30 @@ pnpm add -g rpget
 Hit `rpget <url>`.
 
 ```sh
-# GitHub
 rpget https://github.com/bisquit/rpget/tree/main/sample
-
-# GitLab
-rpget https://gitlab.com/bisquit-lab/rpget-test/-/tree/main/sample
-```
-
-You can specify file, tag or commits. Just hit the URL you want.
-
-```sh
-# file
-rpget https://github.com/bisquit/rpget/blob/main/sample/README.md
-
-# tag, commits
-rpget https://github.com/bisquit/rpget/tree/v0.0.1/sample
-rpget https://github.com/bisquit/rpget/tree/9541f14414f10a7d7a2789f529dce6d4bebeaa42/sample
-```
-
-You can also download overall repo. (It practically equals to "Download ZIP", unzip it, and move to current directory)
-
-```sh
-rpget https://github.com/bisquit/rpget
 ```
 
 ## How it works
 
-This tool downloads archive(.zip) into a temp directory using API, and
+This tool fetches archive(.zip) with API, and
 after user confirmed, decompresses it and copies into current directory.
 
-Because branches can include `/`, we cannot distinguish the URL `main/src` between:
+Because branches can include `/`, we cannot distinguish the URL `main/src` is which:
 
 - a) `main/src` branch
 - b) `main` branch and `src` directory
 
-So this tool attempts to fetch archive with "possible refs" concurrently (in this case, `main` and `main/src`).
-It's much faster than checking with `git fetch` or `git clone`.
+So it attempts to fetch archive with "possible refs" (in this case, `main` and `main/src`) concurrently.
 
-## Comparison
+It takes a bit networking cost, but works as fast as `git fetch` or `git clone`.
+
+## Related and Comparison
 
 This tool is initialy inspired by
 
 - https://github.com/Rich-Harris/degit
 - https://github.com/unjs/giget
 
-While these are primarily intended for **scaffolding from nothing**, this tool is intended for **copying into existing code**.
+While these are primarily intended for **scaffolding**, this tool is designed for **getting a portion of the repository**.
 
-Also, because of its use case, aimed to easily download partial directory, not the whole repository.
+Also I aimed for intuitive commands you don't need to remember how to specify.
