@@ -1,7 +1,7 @@
 {
   "name": "rpget",
   "description": "Download a directory or file from a repository url",
-  "version": "0.3.2",
+  "version": "1.0.0-beta.0",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
