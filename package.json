@@ -21,7 +21,7 @@
     "build": "tsup src/index.ts --format esm --clean",
     "build:debug": "pnpm build --env.RPGET_MODE=DEBUG",
     "test": "vitest",
-    "test:ci": "vitest run --coverage.enabled --coverage.provider=istanbul --coverage.all --coverage.clean --coverage.exclude=src/utils",
+    "test:ci": "vitest run --coverage.enabled --coverage.provider=istanbul --coverage.all --coverage.clean --coverage.include=src/core",
     "lint": "run-p lint:*",
     "lint:eslint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:prettier": "prettier --check src",
