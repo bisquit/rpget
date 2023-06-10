@@ -1,4 +1,5 @@
-import cpy from 'cpy';
+import shell from 'shelljs';
+
 export async function copy(src: string, dist: string): Promise<void> {
-  await cpy(src, dist);
+  shell.cp('-R', src, dist);
 }

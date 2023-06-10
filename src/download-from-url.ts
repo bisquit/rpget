@@ -58,8 +58,11 @@ export async function downloadFromUrl(url: string) {
         strip: 1,
       });
 
-      const copyDist = '.';
-      await copy(`${archive.filedir}/${reponame}${subpath ?? ''}`, copyDist);
+      const copySrc = `${archive.filedir}/${reponame}${subpath ?? ''}`;
+      const copyDist = process.cwd();
+      debugLog({ copySrc, copyDist });
+      await copy(copySrc, copyDist);
+
       await archiveDirCleanup();
     } catch (e) {
       await archiveDirCleanup();
