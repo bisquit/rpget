@@ -15,11 +15,14 @@ pnpm rm -g rpget
 # linking this pkg to global
 pnpm link -g
 
+# install latest dependencies
+pnpm i
+
 # Code validation
 pnpm validate
 
 # build
-pnpm build --watch
+pnpm build
 
 # Move to clean directory (here use Desktop)
 cd ~/Desktop
