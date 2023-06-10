@@ -3,6 +3,7 @@ import decompress from 'decompress';
 import colors from 'picocolors';
 
 import { downloaderFor } from './core/downloaders';
+import { createFileComponents } from './core/file-components';
 import { parseUrl } from './core/parse-url';
 import { copy } from './utils/copy';
 import { createTempDir } from './utils/create-temp';
@@ -11,8 +12,6 @@ import { debugLog } from './utils/debug';
 export async function downloadFromUrl(url: string) {
   try {
     const { provider, repo, rest } = await parseUrl(url);
-
-    log.info(`Detected ${provider} url`);
 
     const { dir: archiveDir, cleanup: archiveDirCleanup } =
       await createTempDir();
@@ -41,19 +40,13 @@ export async function downloadFromUrl(url: string) {
         archiveDir,
       });
 
-      s.stop(
-        [
-          'Downloaded archive',
-          `      repo - ${repo}`,
-          ref && `      ref  - ${ref}`,
-          subpath && `      path - ${subpath}`,
-        ]
-          .filter(Boolean)
-          .join('\n')
-      );
+      s.stop('Downloaded archive from ' + `${repo}${ref ? `#${ref}` : ''}`);
 
+      const filename = subpath && createFileComponents(subpath).filename;
       const confirmed = await confirm({
-        message: `Proceed to copy?`,
+        message: `Copy ${
+          filename ? `${colors.cyan(filename)} ` : ''
+        }to current directory?`,
       });
 
       if (!confirmed || isCancel(confirmed)) {
