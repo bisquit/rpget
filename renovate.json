@@ -3,6 +3,7 @@
   "extends": ["config:base", ":timezone(Asia/Tokyo)"],
   "enabledManagers": ["npm"],
   "schedule": ["after 10:00 and before 22:00"],
+  "reviewers": ["bisquit"],
   "prConcurrentLimit": 5,
   "stabilityDays": 3,
   "platformAutomerge": true,
