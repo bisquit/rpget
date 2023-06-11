@@ -5,7 +5,7 @@
   "reviewers": ["bisquit"],
   "labels": ["dependencies"],
   "rangeStrategy": "bump",
-  "minimumReleaseAge": 3,
+  "minimumReleaseAge": "3 days",
   "platformAutomerge": true,
   "major": {
     "labels": ["major"] 
