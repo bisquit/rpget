@@ -4,7 +4,9 @@
   "enabledManagers": ["npm"],
   "schedule": ["after 10:00 and before 22:00"],
   "reviewers": ["bisquit"],
+  "labels": ["dependencies"],
   "prConcurrentLimit": 5,
+  "rangeStrategy": "bump",
   "stabilityDays": 3,
   "platformAutomerge": true,
   "patch": {
