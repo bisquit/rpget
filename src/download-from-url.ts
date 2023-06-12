@@ -1,4 +1,4 @@
-import { cancel, confirm, isCancel, outro, spinner } from '@clack/prompts';
+import { cancel, confirm, isCancel, log, outro, spinner } from '@clack/prompts';
 import decompress from 'decompress';
 import colors from 'picocolors';
 
@@ -8,6 +8,8 @@ import { parseUrl } from './core/parse-url';
 import { copy } from './utils/copy';
 import { createTempDir } from './utils/create-temp';
 import { debugLog } from './utils/debug';
+import { fileExists } from './utils/file-exists';
+import { rmrf } from './utils/rm';
 
 export async function downloadFromUrl(url: string) {
   try {
@@ -39,21 +41,39 @@ export async function downloadFromUrl(url: string) {
         rest,
         archiveDir,
       });
+      const reponame = repo.split('/')[1];
 
       s.stop('Downloaded archive from ' + `${repo}${ref ? `#${ref}` : ''}`);
 
-      const filename = subpath && createFileComponents(subpath).filename;
+      const filename = subpath
+        ? createFileComponents(subpath).filename
+        : reponame;
       const confirmed = await confirm({
-        message: `Copy ${
-          filename ? `${colors.cyan(filename)} ` : ''
-        }to current directory?`,
+        message: `Copy ${`${colors.cyan(filename)} `}to current directory?`,
       });
 
       if (!confirmed || isCancel(confirmed)) {
         await cancelProcess();
       }
 
-      const reponame = repo.split('/')[1];
+      const isFileExists = fileExists(filename);
+
+      if (isFileExists) {
+        log.warning(`Current directory already has a ${colors.cyan(filename)}`);
+        const acceptOverwrite = await confirm({
+          message: `Do you want to continue?`,
+          active: 'Yes, overwrite it',
+          initialValue: false,
+        });
+
+        if (!acceptOverwrite || isCancel(acceptOverwrite)) {
+          await cancelProcess();
+        }
+
+        // cp failed if file exists, so remove it before.
+        await rmrf(filename);
+      }
+
       await decompress(archive.filepath, `${archive.filedir}/${reponame}`, {
         strip: 1,
       });
