@@ -25,6 +25,15 @@ The corresponding CLI must be installed and authenticated.
 
 You only need to install what you use.
 
+<details>
+<summary>Why install CLI?</summary>
+
+This tool uses GitHub or GitLab rest api to fetch repository archive.
+It is possible to authenticate with an access token, but an additional token must be issued, which must then be passed to the tool.
+
+To keep it simple and robust, we are taking advantage of the CLI's authentication feature.
+</details>
+
 ## Install
 
 You can quickly try with `npx`
