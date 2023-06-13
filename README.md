@@ -78,7 +78,7 @@ Because branches can include `/`, we cannot distinguish the URL `main/src` is wh
 
 So it attempts to fetch archive with "possible refs" (in this case, `main` and `main/src`) concurrently.
 
-It takes a bit networking cost, but works as fast as `git fetch` or `git clone`.
+It takes a bit networking cost, but works faster than `git clone`.
 
 ## Related and Comparison
 
