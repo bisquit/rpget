@@ -3,9 +3,11 @@ import { mkdir, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import unzipper from 'unzipper';
+import yauzl from 'yauzl-promise';
 
 import { copy } from '../utils/copy';
 import { rmrf } from '../utils/rm';
+
 /**
  * decompress zip and extract to dist directory
  *
@@ -40,17 +42,15 @@ export async function unzip(zipSrc: string, dist: string) {
   const tmp = join(dist, 'tmp');
   await extract(zipSrc, tmp);
 
-  // const dirent = (await readdir(tmp, { withFileTypes: true }))[0];
+  const dirent = (await readdir(tmp, { withFileTypes: true }))[0];
 
-  // console.log(dirent);
+  if (dirent.isDirectory()) {
+    await copy(join(tmp, dirent.name, '*'), dist);
+  } else {
+    await copy(join(tmp, '*'), dist);
+  }
 
-  // if (dirent.isDirectory()) {
-  //   await copy(join(tmp, dirent.name, '*'), dist);
-  // } else {
-  //   await copy(join(tmp, '*'), dist);
-  // }
-
-  // await rmrf(tmp);
+  await rmrf(tmp);
 }
 
 async function extract(src: string, dist: string) {
