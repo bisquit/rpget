@@ -22,5 +22,6 @@ dist-ssr
 *.sw?
 
 tmp
-x
+tmp-*
+dir-1
 coverage
