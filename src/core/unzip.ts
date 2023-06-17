@@ -1,4 +1,8 @@
-import decompress from 'decompress';
+import { existsSync } from 'node:fs';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join, sep } from 'node:path';
+
+import AdmZip from 'adm-zip';
 
 /**
  * decompress zip and extract to dist directory
@@ -27,7 +31,38 @@ import decompress from 'decompress';
  *   file-1
  */
 export async function unzip(zipSrc: string, dist: string) {
-  await decompress(zipSrc, dist, {
-    strip: 1,
-  });
+  const zip = new AdmZip(zipSrc);
+
+  if (!existsSync(dist)) {
+    await mkdir(dist, { recursive: true });
+  }
+
+  for (const entry of zip.getEntries()) {
+    const entryName = entry.entryName;
+    const shiftedEntryName = shiftPath(entryName);
+
+    if (entry.isDirectory) {
+      if (!existsSync(join(dist, shiftedEntryName))) {
+        await mkdir(join(dist, shiftedEntryName));
+      }
+      continue;
+    }
+
+    const content = entry.getData();
+    if (!content) {
+      continue;
+    }
+
+    await writeFile(join(dist, shiftedEntryName), content, {
+      encoding: 'utf-8',
+    });
+  }
+}
+
+export function shiftPath(path: string, level = 1) {
+  if (!path.includes(sep)) {
+    return path;
+  }
+
+  return path.split(sep).slice(level).join(sep);
 }
