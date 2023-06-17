@@ -1,9 +1,11 @@
-import { existsSync } from 'node:fs';
-import { mkdir, writeFile } from 'node:fs/promises';
-import { join, sep } from 'node:path';
+import { createReadStream, existsSync } from 'node:fs';
+import { mkdir, readdir } from 'node:fs/promises';
+import { join } from 'node:path';
 
-import AdmZip from 'adm-zip';
+import unzipper from 'unzipper';
 
+import { copy } from '../utils/copy';
+import { rmrf } from '../utils/rm';
 /**
  * decompress zip and extract to dist directory
  *
@@ -31,38 +33,32 @@ import AdmZip from 'adm-zip';
  *   file-1
  */
 export async function unzip(zipSrc: string, dist: string) {
-  const zip = new AdmZip(zipSrc);
-
   if (!existsSync(dist)) {
     await mkdir(dist, { recursive: true });
   }
 
-  for (const entry of zip.getEntries()) {
-    const entryName = entry.entryName;
-    const shiftedEntryName = shiftPath(entryName);
+  const tmp = join(dist, 'tmp');
+  await extract(zipSrc, tmp);
 
-    if (entry.isDirectory) {
-      if (!existsSync(join(dist, shiftedEntryName))) {
-        await mkdir(join(dist, shiftedEntryName));
-      }
-      continue;
-    }
+  // const dirent = (await readdir(tmp, { withFileTypes: true }))[0];
 
-    const content = entry.getData();
-    if (!content) {
-      continue;
-    }
+  // console.log(dirent);
 
-    await writeFile(join(dist, shiftedEntryName), content, {
-      encoding: 'utf-8',
-    });
-  }
+  // if (dirent.isDirectory()) {
+  //   await copy(join(tmp, dirent.name, '*'), dist);
+  // } else {
+  //   await copy(join(tmp, '*'), dist);
+  // }
+
+  // await rmrf(tmp);
 }
 
-export function shiftPath(path: string, level = 1) {
-  if (!path.includes(sep)) {
-    return path;
-  }
-
-  return path.split(sep).slice(level).join(sep);
+async function extract(src: string, dist: string) {
+  return new Promise<void>((resolve) => {
+    createReadStream(src)
+      .pipe(unzipper.Extract({ path: dist }))
+      .on('close', () => {
+        resolve();
+      });
+  });
 }

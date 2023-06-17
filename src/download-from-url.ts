@@ -81,7 +81,7 @@ export async function downloadFromUrl(url: string) {
       debugLog({ copySrc, copyDist });
       await copy(copySrc, copyDist);
 
-      await archiveDirCleanup();
+      // await archiveDirCleanup();
     } catch (e) {
       await archiveDirCleanup();
       const message = createErrorMessage(e);
