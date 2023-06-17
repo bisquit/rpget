@@ -1,10 +1,10 @@
 import { cancel, confirm, isCancel, log, outro, spinner } from '@clack/prompts';
-import decompress from 'decompress';
 import colors from 'picocolors';
 
 import { downloaderFor } from './core/downloaders';
 import { createFileComponents } from './core/file-components';
 import { parseUrl } from './core/parse-url';
+import { unzip } from './core/unzip';
 import { copy } from './utils/copy';
 import { createTempDir } from './utils/create-temp';
 import { debugLog } from './utils/debug';
@@ -74,9 +74,7 @@ export async function downloadFromUrl(url: string) {
         await rmrf(filename);
       }
 
-      await decompress(archive.filepath, `${archive.filedir}/${reponame}`, {
-        strip: 1,
-      });
+      await unzip(archive.filepath, `${archive.filedir}/${reponame}`);
 
       const copySrc = `${archive.filedir}/${reponame}${subpath ?? ''}`;
       const copyDist = process.cwd();
