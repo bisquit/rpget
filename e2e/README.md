@@ -12,9 +12,6 @@ Curretly, E2E is hand-testing for cross patterns.
 # remove installed version
 pnpm rm -g rpget
 
-# linking this pkg to global
-pnpm link -g
-
 # install latest dependencies
 pnpm i
 
@@ -23,6 +20,9 @@ pnpm validate
 
 # build
 pnpm build
+
+# linking this pkg to global
+pnpm link -g
 
 # Move to clean directory (here use Desktop)
 cd ~/Desktop
