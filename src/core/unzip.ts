@@ -59,7 +59,7 @@ export async function unzip(zipSrc: string, dist: string) {
   }
 }
 
-function shiftPath(path: string, level = 1) {
+export function shiftPath(path: string, level = 1) {
   if (!path.includes(sep)) {
     return path;
   }

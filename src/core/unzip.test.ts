@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 
 import { beforeAll, describe, expect, test } from 'vitest';
 
-import { unzip } from './unzip';
+import { shiftPath, unzip } from './unzip';
 
 const testDir = resolve(process.cwd(), 'tmp-test-unzip');
 const fixtureDir = resolve(process.cwd(), 'test/fixtures');
@@ -48,4 +48,11 @@ describe('unzip()', () => {
       true
     );
   });
+});
+
+test('shiftPath()', async () => {
+  expect(shiftPath('')).toBe('');
+  expect(shiftPath('a')).toBe('a');
+  expect(shiftPath('a/b')).toBe('b');
+  expect(shiftPath('a/b/c')).toBe('b/c');
 });
