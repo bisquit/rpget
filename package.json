@@ -14,7 +14,7 @@
     "rpget": "./dist/index.js"
   },
   "engines": {
-    "node": ">=v18.16.0"
+    "node": ">=v18.16.1"
   },
   "scripts": {
     "dev": "cross-env RPGET_MODE=DEBUG tsx src/index.ts",
