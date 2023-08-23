@@ -1,3 +1,9 @@
+# DEPRECATED
+
+Use https://github.com/bisquit/ghget-cli instead.
+
+---
+
 <div align="center">
   <img src="./assets/screenshot.png" width="70%" />
 </div>
